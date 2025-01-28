@@ -5,9 +5,14 @@ const port = process.env.PORT || 3000;
 require('dotenv').config();
 
 
-app.use(cors());
-app.use(express.json());
 
+app.use(express.json());
+app.use(cors(
+  {
+    origin: ['http://localhost:5173', 'https://sports-arena-cb441.web.app', 'https://sports-arena-cb441.firebaseapp.com'], //replace with client address
+    credentials: true,
+  }
+));
 app.get('/', (req, res) => {
   res.send('Hello World!');
 });
@@ -37,7 +42,7 @@ const run = async () => {
     const database = client.db("SportsArena");
 
     const reviewsCollection = database.collection("reviews");
-    
+
     app.get('/reviews', async (req, res) => {
       const result = await reviewsCollection.find().toArray();
       res.send(result);
@@ -50,7 +55,10 @@ const run = async () => {
       const result = await equipmentCollection.insertOne(newEquipment);
       res.send(result);
     });
-
+    app.get('/equipment', async (req, res) => {
+      const result = await equipmentCollection.find().toArray();
+      res.send(result);
+    });
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
