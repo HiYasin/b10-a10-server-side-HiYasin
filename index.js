@@ -37,13 +37,19 @@ const run = async () => {
     const database = client.db("SportsArena");
 
     const reviewsCollection = database.collection("reviews");
+    
     app.get('/reviews', async (req, res) => {
       const result = await reviewsCollection.find().toArray();
       res.send(result);
     });
 
 
-
+    const equipmentCollection = database.collection("equipment");
+    app.post('/equipment', async (req, res) => {
+      const newEquipment = req.body;
+      const result = await equipmentCollection.insertOne(newEquipment);
+      res.send(result);
+    });
 
 
     // Send a ping to confirm a successful connection
