@@ -1,8 +1,9 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
 const cors = require('cors');
 const port = process.env.PORT || 3000;
-require('dotenv').config();
+
 
 
 
@@ -37,7 +38,7 @@ const client = new MongoClient(uri, {
 const run = async () => {
   try {
     // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
+    //await client.connect();
 
     const database = client.db("SportsArena");
 
@@ -59,9 +60,19 @@ const run = async () => {
       const result = await equipmentCollection.find().toArray();
       res.send(result);
     });
+    app.get('/equipment/:id', async (req, res) => {
+      const id = req.params.id;
+      const query = { _id: new ObjectId(id) };
+      const result = await equipmentCollection.findOne(query);
+      if (result) {
+        res.send(result);
+      } else {
+        res.send({message: "Item doesn't exists"});
+      }
+    });
 
     // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
+    //await client.db("admin").command({ ping: 1 });
     console.log("Pinged your deployment. You successfully connected to MongoDB!");
   } finally {
     // Ensures that the client will close when you finish/error
