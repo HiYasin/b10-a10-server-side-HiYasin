@@ -73,15 +73,28 @@ const run = async () => {
 
     app.get('/my-equipment',  async (req, res) => {
       const email = req.query.email;
+      //console.log(email);
       const query = { userEmail: email };
       const result = await equipmentCollection.find(query).toArray();
       res.send(result);
     });
     app.delete('/delete-equipment/:id', async (req, res) => {
-      console.log('hit')
+      //console.log('hit')
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await equipmentCollection.deleteOne(query);
+      res.send(result);
+    });
+    
+    app.patch('/update-equipment/:id', async (req, res) => {
+      //console.log('hit');
+      const id = req.params.id;
+      const updatedEquipment = req.body;
+      const query = { _id: new ObjectId(id) };
+      const update = {
+        $set: updatedEquipment,
+      };
+      const result = await equipmentCollection.updateOne(query, update);
       res.send(result);
     });
     // Send a ping to confirm a successful connection
