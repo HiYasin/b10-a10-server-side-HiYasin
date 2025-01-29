@@ -56,10 +56,12 @@ const run = async () => {
       const result = await equipmentCollection.insertOne(newEquipment);
       res.send(result);
     });
+
     app.get('/equipment', async (req, res) => {
       const result = await equipmentCollection.find().toArray();
       res.send(result);
     });
+
     app.get('/equipment/:id', async (req, res) => {
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
@@ -73,13 +75,11 @@ const run = async () => {
 
     app.get('/my-equipment',  async (req, res) => {
       const email = req.query.email;
-      //console.log(email);
       const query = { userEmail: email };
       const result = await equipmentCollection.find(query).toArray();
       res.send(result);
     });
     app.delete('/delete-equipment/:id', async (req, res) => {
-      //console.log('hit')
       const id = req.params.id;
       const query = { _id: new ObjectId(id) };
       const result = await equipmentCollection.deleteOne(query);
@@ -87,7 +87,6 @@ const run = async () => {
     });
     
     app.patch('/update-equipment/:id', async (req, res) => {
-      //console.log('hit');
       const id = req.params.id;
       const updatedEquipment = req.body;
       const query = { _id: new ObjectId(id) };
